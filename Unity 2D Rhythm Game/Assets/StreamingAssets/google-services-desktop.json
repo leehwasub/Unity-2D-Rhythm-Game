@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "111829630861",
+    "firebase_url": "https://unity-rhythm-game-tutori-72cdb.firebaseio.com",
+    "project_id": "unity-rhythm-game-tutori-72cdb",
+    "storage_bucket": "unity-rhythm-game-tutori-72cdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111829630861:android:aca98b29127f53db",
+        "android_client_info": {
+          "package_name": "com.leehwasub.unityRhythmPracticeGame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111829630861-ir4o71ktv761paucafoee4v6pactcsfb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXG6AIt3I3ikzlVZVKRdHIiqQqetfh0fI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
