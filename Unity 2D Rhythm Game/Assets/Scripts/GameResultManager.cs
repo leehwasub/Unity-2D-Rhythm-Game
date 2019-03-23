@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.IO;
 using System;
+using Firebase;
+using Firebase.Database;
+using Firebase.Unity.Editor;
 
 public class GameResultManager : MonoBehaviour
 {
@@ -12,6 +15,8 @@ public class GameResultManager : MonoBehaviour
     public Text scoreUI;
     public Text maxComboUI;
     public Image RankUI;
+
+    public List<Text> rankUI;
 
     void Start()
     {
@@ -45,6 +50,51 @@ public class GameResultManager : MonoBehaviour
         else
         {
             RankUI.sprite = Resources.Load<Sprite>("Sprites/Rank C");
+        }
+        initRankText("데이터를 불러오는 중입니다.");
+        DatabaseReference reference;
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://unity-rhythm-game-tutori-72cdb.firebaseio.com/");
+        reference = FirebaseDatabase.DefaultInstance.GetReference("ranks")
+            .Child(PlayerInformation.selectedMusic);
+        //데이터 셋의 모든 데이터를 json형태로 가져온다.
+        reference.OrderByChild("score").GetValueAsync().ContinueWith(task =>
+        {
+            //성공적으로 데이터를 가져온경우
+            if (task.IsCompleted)
+            {
+                List<string> rankList = new List<string>();
+                List<string> emailList = new List<string>();
+                DataSnapshot snapshot = task.Result;
+                //json 데이터의 각원소에 접근합니다.
+                foreach(DataSnapshot data in snapshot.Children)
+                {
+                    IDictionary rank = (IDictionary)data.Value;
+                    emailList.Add(rank["email"].ToString());
+                    rankList.Add(rank["score"].ToString());
+                }
+                //정렬 이후 내림차순 정렬합니다.
+                emailList.Reverse();
+                rankList.Reverse();
+                // 최대 상위 3명의 순위를 차례대로 화면에 출력한다.
+                initRankText("플레이 한 사용자가 없습니다.");
+                List<Text> textList = new List<Text>();
+                for (int i = 0; i < 3; i++)
+                {
+                    textList.Add(rankUI[i]);
+                }
+                for(int i = 0; i < rankList.Count && i < 3; i++)
+                {
+                    textList[i].text = (i+1) + "위: " + emailList[i] + " (" + rankList[i] + " 점)";
+                }
+            }
+        });
+    }
+
+    public void initRankText(string text)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            rankUI[i].text = text;
         }
     }
 
