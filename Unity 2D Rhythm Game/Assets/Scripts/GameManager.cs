@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        objectPooler = noteObjectPooler.GetComponent<ObjectPooler>();
         Invoke("MusicStart", 2);
         judgementSpriteRenderer = judgeUI.GetComponent<Image>();
         judgementSpriteAnimator = judgeUI.GetComponent<Animator>();
@@ -74,8 +75,78 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public GameObject noteObjectPooler;
+    private ObjectPooler objectPooler;
+
     void Update()
     {
+        //터치 1개 이상 발생하고 있다면
+        if(Input.touchCount > 0)
+        {
+            for(int i = 0; i < Input.touchCount; i++)
+            {
+                Touch tempTouch = Input.GetTouch(i);
+                if(tempTouch.phase == TouchPhase.Began)
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(tempTouch.position);
+                    RaycastHit hit;
+                    if(Physics.Raycast(ray, out hit, Mathf.Infinity))
+                    {
+                        if(hit.collider.name == "Trail 1")
+                        {
+                            ShineTrail(0);
+                            objectPooler.Judge(1);
+                        }
+                        else if (hit.collider.name == "Trail 2")
+                        {
+                            ShineTrail(1);
+                            objectPooler.Judge(2);
+                        }
+                        else if (hit.collider.name == "Trail 3")
+                        {
+                            ShineTrail(2);
+                            objectPooler.Judge(3);
+                        }
+                        else if (hit.collider.name == "Trail 4")
+                        {
+                            ShineTrail(3);
+                            objectPooler.Judge(4);
+                        }
+                    }
+                }
+            }
+        }
+        /*
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2) || Input.GetMouseButtonDown(3))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            {
+                if (hit.collider.name == "Trail 1")
+                {
+                    ShineTrail(0);
+                    objectPooler.Judge(1);
+                }
+                else if (hit.collider.name == "Trail 2")
+                {
+                    ShineTrail(1);
+                    objectPooler.Judge(2);
+                }
+                else if (hit.collider.name == "Trail 3")
+                {
+                    ShineTrail(2);
+                    objectPooler.Judge(3);
+                }
+                else if (hit.collider.name == "Trail 4")
+                {
+                    ShineTrail(3);
+                    objectPooler.Judge(4);
+                }
+            }
+        }
+        */
+
         // 사용자가 입력한 키에 해당하는 라인을 빛나게 처리합니다.
         if (Input.GetKey(KeyCode.D)) ShineTrail(0);
         if (Input.GetKey(KeyCode.F)) ShineTrail(1);
